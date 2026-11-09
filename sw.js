@@ -40,4 +40,8 @@ self.addEventListener('fetch', (e) => {
       });
     }).catch(() => caches.match('./index.html'))
   );
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 99677a6 (تعديل الكود كامل)
