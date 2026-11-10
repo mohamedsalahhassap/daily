@@ -1,490 +1,411 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#4f46e5">
-    <title>لوحة التحكم الشخصية | Life Dashboard</title>
-    
-    <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
-    <!-- Google Fonts & Tailwind CSS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#eeeefd',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                        }
-                    },
-                    fontFamily: {
-                        cairo: ['Cairo', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .tab-btn.active {
-            color: #4f46e5;
-            border-bottom: 2px solid #4f46e5;
-        }
-        .dark .tab-btn.active {
-            color: #818cf8;
-            border-bottom: 2px solid #818cf8;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<title>دوام — لوحة التحكم الشخصية</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="دوام">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f9fafb;--card:#fff;--bd:#e5e7eb;--tx:#1f2937;--mut:#9ca3af;--sub:#6b7280;--in:#f3f4f6;--pri:#4f46e5;--pri2:#4338ca;--soft:#eef2ff;--ok:#22c55e;--dng:#ef4444;--warn:#f59e0b}
+.dark{--bg:#111827;--card:#1f2937;--bd:#374151;--tx:#f3f4f6;--mut:#6b7280;--sub:#9ca3af;--in:#111827;--pri:#6366f1;--pri2:#4f46e5;--soft:#2b2a5a}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Cairo','Segoe UI',Tahoma,'Noto Naskh Arabic',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;transition:background .2s;padding-bottom:env(safe-area-inset-bottom)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:56rem;margin:0 auto;padding:0 1rem}
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding-top:env(safe-area-inset-top)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
+.logo{display:flex;align-items:center;gap:.7rem}
+.logo i{font-style:normal;width:2.5rem;height:2.5rem;border-radius:.8rem;background:linear-gradient(135deg,#6366f1,#9333ea);display:grid;place-items:center;font-size:1.25rem;color:#fff}
+h1{font-size:1.1rem;line-height:1.2}h2{font-size:1rem;color:var(--sub);display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.small{font-size:.75rem;color:var(--sub)}
+nav{display:flex;border-top:1px solid var(--bd)}
+.tab{flex:1;padding:.75rem 0;font-size:.85rem;font-weight:600;color:var(--sub);border-bottom:2px solid transparent}
+.tab.active{color:var(--pri);border-color:var(--pri)}
+main{padding:1.2rem 0 3rem}
+section{display:flex;flex-direction:column;gap:1.2rem}
+section[hidden]{display:none}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:1rem;padding:1rem;display:flex;flex-direction:column;gap:.7rem}
+.row{display:flex;gap:.5rem;align-items:center}.row.wrap2{flex-wrap:wrap}.grow{flex:1;min-width:0}
+input[type=text],select,textarea{background:var(--in);border:1px solid var(--bd);border-radius:.8rem;padding:.6rem .9rem;font-size:.9rem;width:100%}
+select{width:auto}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:0}
+.btn{background:var(--pri);color:#fff;font-weight:700;padding:.6rem 1rem;border-radius:.8rem;font-size:.9rem;white-space:nowrap}
+.btn:hover{background:var(--pri2)}.btn.ghost{background:var(--soft);color:var(--pri)}
+.ico{color:var(--mut);padding:.3rem .45rem;border-radius:.5rem;font-size:.9rem}.ico:hover{color:var(--dng);background:var(--in)}.ico.on{color:var(--warn)}
+.item{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.7rem .8rem;background:var(--card);border:1px solid var(--bd);border-radius:.9rem}
+.item label{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0;cursor:pointer}
+.item input[type=checkbox]{width:1.25rem;height:1.25rem;accent-color:var(--pri);flex:none}
+.done{text-decoration:line-through;color:var(--mut)}
+.tag{font-size:.65rem;background:var(--in);padding:.1rem .5rem;border-radius:.4rem;font-weight:600;color:var(--sub);white-space:nowrap}
+.tag.late{background:#fee2e2;color:#b91c1c}.dark .tag.late{background:#7f1d1d;color:#fecaca}
+.badge{font-size:.75rem;background:var(--soft);color:var(--pri);padding:.15rem .65rem;border-radius:99px;font-weight:700}
+.list{display:flex;flex-direction:column;gap:.5rem}
+.empty{font-size:.8rem;color:var(--mut);text-align:center;padding:1.2rem 0}
+.hab{display:flex;flex-direction:column;gap:.6rem;padding:.9rem;background:var(--card);border:1px solid var(--bd);border-radius:1rem}
+.week{display:flex;gap:.35rem}
+.day{flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem;font-size:.65rem;color:var(--sub)}
+.day button{width:100%;max-width:2.4rem;height:2.1rem;border-radius:.6rem;background:var(--in);color:#fff;font-weight:700}
+.day button.y{background:var(--ok)}.day button.off{opacity:.35}.day.today span{color:var(--pri);font-weight:700}
+.chips{display:flex;gap:.3rem;flex-wrap:wrap}
+.chip{display:flex}.chip input{display:none}
+.chip span{width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:var(--in);font-size:.8rem;cursor:pointer;color:var(--sub)}
+.chip input:checked+span{background:var(--pri);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr;gap:.7rem}
+@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.note{background:#fffbeb;border-color:#fde68a;justify-content:space-between}
+.dark .note{background:var(--card);border-color:var(--bd)}
+.note p{white-space:pre-wrap;font-size:.9rem;word-break:break-word}
+.banner{display:flex;justify-content:space-between;align-items:center;gap:.6rem;background:var(--soft);color:var(--pri);padding:.7rem 1rem;border-radius:.9rem;font-size:.85rem;font-weight:600}
+.banner[hidden]{display:none}
+#toast{position:fixed;inset-inline:1rem;bottom:calc(1rem + env(safe-area-inset-bottom));margin:auto;max-width:24rem;background:#111827;color:#fff;padding:.7rem 1rem;border-radius:.9rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.85rem;z-index:50;box-shadow:0 8px 24px #0005}
+#toast[hidden]{display:none}#toast button{color:#a5b4fc;font-weight:700}
+.hidden{display:none!important}
+</style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-200">
+<body>
+<header>
+ <div class="wrap">
+  <div class="top">
+   <div class="logo"><i>⚡</i><div><h1>دوام</h1><p class="small" id="current-date">جاري التحميل...</p></div></div>
+   <div class="row">
+    <button id="install-btn" class="btn ghost hidden" style="padding:.35rem .8rem;font-size:.75rem">📲 تثبيت</button>
+    <button id="theme-toggle" class="ico" style="font-size:1.1rem" aria-label="تبديل الوضع"><span id="theme-icon">🌙</span></button>
+   </div>
+  </div>
+  <nav role="tablist">
+   <button class="tab active" id="tab-tasks" role="tab" onclick="switchTab('tasks')">📋 المهام</button>
+   <button class="tab" id="tab-habits" role="tab" onclick="switchTab('habits')">🔥 العادات</button>
+   <button class="tab" id="tab-notes" role="tab" onclick="switchTab('notes')">💡 إفراغ العقل</button>
+   <button class="tab" id="tab-backup" role="tab" onclick="switchTab('backup')">💾 نسخ احتياطي</button>
+  </nav>
+ </div>
+</header>
 
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-30 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3 space-x-reverse">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
-                    ⚡
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold leading-tight">لوحة التحكم الشخصية</h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400" id="current-date">جاري التحميل...</p>
-                </div>
-            </div>
+<main class="wrap">
+ <div class="banner" id="reminder" hidden style="margin-bottom:1rem"><span id="reminder-text"></span><button class="ico" aria-label="إغلاق" onclick="this.parentNode.hidden=true">✕</button></div>
+ <div class="banner" id="ios-hint" hidden style="margin-bottom:1rem"><span>لتثبيت التطبيق على آيفون: اضغط «مشاركة» ثم «إضافة إلى الشاشة الرئيسية».</span><button class="ico" aria-label="إغلاق" onclick="dismissIos()">✕</button></div>
 
-            <!-- Light/Dark Mode Toggle & Install Button -->
-            <div class="flex items-center gap-2">
-                <button id="install-btn" class="hidden text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1.5 rounded-lg font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition">
-                    📲 تثبيت
-                </button>
-                <button id="theme-toggle" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition" aria-label="تبديل الوضع">
-                    <span id="theme-icon">🌙</span>
-                </button>
-            </div>
-        </div>
+ <!-- TASKS -->
+ <section id="sec-tasks">
+  <div class="card">
+   <div class="small" id="stats"></div>
+   <div class="row wrap2">
+    <input class="grow" type="text" id="task-input" placeholder="ما هي المهمة التي تريد إنجازها؟" style="min-width:12rem">
+    <select id="task-category" aria-label="التصنيف"><option value="دراسة">📚 دراسة</option><option value="عمل">💼 عمل</option><option value="شخصي">👤 شخصي</option><option value="صحة">💪 صحة</option></select>
+    <select id="task-day" aria-label="اليوم"><option value="today">اليوم</option><option value="tomorrow">الغد 🌙</option></select>
+    <select id="task-priority" aria-label="الأولوية"><option value="0">عادية</option><option value="1">⭐ مهمة</option></select>
+   </div>
+   <button class="btn" onclick="addTask()">إضافة المهمة ✨</button>
+  </div>
+  <div class="list">
+   <h2><span>مهام اليوم</span>
+    <span class="row"><select id="filter-cat" aria-label="تصفية" onchange="filterCat=this.value;render()" style="font-size:.75rem;padding:.25rem .5rem"><option value="all">كل التصنيفات</option><option value="دراسة">دراسة</option><option value="عمل">عمل</option><option value="شخصي">شخصي</option><option value="صحة">صحة</option></select><span class="badge" id="tasks-progress">0 / 0</span></span></h2>
+   <div id="today-list" class="list"></div>
+  </div>
+  <div class="list" style="padding-top:1rem;border-top:1px solid var(--bd)">
+   <h2>خطة الغد 🌙</h2><div id="tomorrow-list" class="list"></div>
+  </div>
+ </section>
 
-        <!-- Navigation Tabs -->
-        <nav class="max-w-4xl mx-auto px-4 flex border-t border-gray-100 dark:border-gray-700/50">
-            <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-btn active flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-indigo-600 transition text-center">
-                📋 المهام اليومية
-            </button>
-            <button onclick="switchTab('habits')" id="tab-habits" class="tab-btn flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-indigo-600 transition text-center">
-                🔥 تتبع العادات
-            </button>
-            <button onclick="switchTab('brain-dump')" id="tab-brain-dump" class="tab-btn flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-indigo-600 transition text-center">
-                💡 إفراغ العقل
-            </button>
-        </nav>
-    </header>
+ <!-- HABITS -->
+ <section id="sec-habits" hidden>
+  <div class="card">
+   <div class="row"><input class="grow" type="text" id="habit-input" placeholder="أضف عادة جديدة (قراءة 10 صفحات، رياضة...)"><button class="btn" onclick="addHabit()">إضافة</button></div>
+   <div class="small">أيام العادة:</div>
+   <div class="chips" id="habit-days"></div>
+  </div>
+  <div id="habits-list" class="list"></div>
+ </section>
 
-    <!-- Main Content Container -->
-    <main class="max-w-4xl mx-auto px-4 py-6">
+ <!-- NOTES -->
+ <section id="sec-notes" hidden>
+  <div class="card">
+   <textarea id="note-input" rows="3" placeholder="أفرغ أفكارك العشوائية هنا فوراً..."></textarea>
+   <button class="btn" onclick="addNote()">حفظ الملاحظة 💡</button>
+  </div>
+  <input type="text" id="note-search" placeholder="🔍 بحث في الملاحظات" oninput="noteQ=this.value.trim();renderNotes()">
+  <div id="notes-list" class="grid2"></div>
+ </section>
 
-        <!-- TAB 1: DAILY TASKS -->
-        <section id="sec-tasks" class="space-y-6">
-            <!-- Add Task Form -->
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-3">
-                <div class="flex flex-col md:flex-row gap-2">
-                    <input type="text" id="task-input" placeholder="ما هي المهمة التي تريد إنجازها؟" class="flex-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <div class="flex gap-2">
-                        <select id="task-category" class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="دراسة">📚 دراسة</option>
-                            <option value="عمل">💼 عمل</option>
-                            <option value="شخصي">👤 شخصي</option>
-                            <option value="صحة">💪 صحة</option>
-                        </select>
-                        <select id="task-target-day" class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="today">اليوم</option>
-                            <option value="tomorrow">الغد 🌙</option>
-                        </select>
-                    </div>
-                </div>
-                <button onclick="addTask()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">
-                    إضافة المهمة ✨
-                </button>
-            </div>
+ <!-- BACKUP -->
+ <section id="sec-backup" hidden>
+  <div class="card">
+   <h2>نسخة احتياطية</h2>
+   <p class="small">بياناتك محفوظة على هذا الجهاز فقط، ومسح بيانات المتصفح يحذفها. صدّر نسخة بشكل دوري، واستوردها على أي جهاز آخر.</p>
+   <div class="row wrap2">
+    <button class="btn" onclick="exportData()">⬇️ تصدير البيانات</button>
+    <button class="btn ghost" onclick="document.getElementById('import-file').click()">⬆️ استيراد من ملف</button>
+    <input type="file" id="import-file" accept="application/json,.json" class="hidden" onchange="importData(this)">
+   </div>
+  </div>
+ </section>
+</main>
+<div id="toast" hidden><span id="toast-text"></span><button id="toast-act" class="hidden"></button></div>
 
-            <!-- Today's Tasks List -->
-            <div class="space-y-3">
-                <h2 class="text-base font-bold flex items-center justify-between text-gray-700 dark:text-gray-300">
-                    <span>مهام اليوم</span>
-                    <span id="tasks-progress" class="text-xs bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full font-bold">0 / 0</span>
-                </h2>
-                <div id="today-tasks-list" class="space-y-2">
-                    <!-- Dynamic Items -->
-                </div>
-            </div>
+<script>
+const KEY = 'life_dashboard_data';
+const DAYS = ['ح','ن','ث','ر','خ','ج','س'];
+const DEF = () => ({tasks: [], habits: [], notes: [], darkMode: null, history: {}});
+let S = DEF(), filterCat = 'all', noteQ = '', lastDel = null, toastTimer, deferredPrompt;
 
-            <!-- Tomorrow's Tasks List -->
-            <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-800">
-                <h2 class="text-base font-bold text-gray-700 dark:text-gray-300">خطة الغد 🌙</h2>
-                <div id="tomorrow-tasks-list" class="space-y-2">
-                    <!-- Dynamic Items -->
-                </div>
-            </div>
-        </section>
+/* ---------- Date helpers (local time, not UTC) ---------- */
+const pad = n => String(n).padStart(2, '0');
+const dk = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const todayK = () => dk(new Date());
+const parse = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y, m-1, d); };
+const addD = (k, n) => { const d = parse(k); d.setDate(d.getDate() + n); return dk(d); };
+const dow = k => parse(k).getDay();
+const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 
-        <!-- TAB 2: HABIT TRACKER -->
-        <section id="sec-habits" class="hidden space-y-6">
-            <!-- Add Habit Form -->
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex gap-2">
-                <input type="text" id="habit-input" placeholder="أضف عادة جديدة (مثال: قراءة 10 صفحات، رياضة...)" class="flex-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <button onclick="addHabit()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition shadow-sm whitespace-nowrap">
-                    إضافة عادة
-                </button>
-            </div>
+/* ---------- State ---------- */
+function migrate(r) {
+  const s = Object.assign(DEF(), r), t = todayK();
+  ['tasks','habits','notes'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
+  if (!s.history || typeof s.history !== 'object') s.history = {};
+  s.tasks.forEach((x, i) => {
+    if (!x.date) x.date = x.targetDay === 'tomorrow' ? addD(t, 1) : t;
+    delete x.targetDay; x.priority = x.priority || 0; x.id = x.id || Date.now() + i;
+  });
+  s.habits.forEach((h, i) => {
+    h.id = h.id || Date.now() + i;
+    if (!Array.isArray(h.days)) {
+      h.days = [];
+      if (h.lastCompleted && h.streak) for (let j = 0; j < h.streak; j++) h.days.push(addD(h.lastCompleted, -j));
+    }
+    delete h.streak; delete h.lastCompleted;
+    if (!Array.isArray(h.weekdays) || !h.weekdays.length) h.weekdays = [0,1,2,3,4,5,6];
+  });
+  s.notes.forEach((n, i) => { n.id = n.id || Date.now() + i; n.ts = n.ts || n.id; delete n.createdAt; });
+  if (typeof s.darkMode !== 'boolean') s.darkMode = null;
+  return s;
+}
+function load() {
+  try { const r = JSON.parse(localStorage.getItem(KEY) || 'null'); if (r && typeof r === 'object') S = migrate(r); } catch (e) { S = DEF(); }
+}
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+  catch (e) { toast('تعذّر الحفظ: التخزين ممتلئ أو غير متاح'); return false; }
+}
+function save() { rollover(); persist(); render(); }
 
-            <!-- Habits List -->
-            <div id="habits-list" class="space-y-3">
-                <!-- Dynamic Items -->
-            </div>
-        </section>
+/* New day: completed tasks from previous days are cleaned; unfinished ones show as "late" */
+function rollover() {
+  const t = todayK();
+  S.tasks = S.tasks.filter(x => !(x.completed && x.date < t));
+  Object.keys(S.history).forEach(k => { if (k < addD(t, -60)) delete S.history[k]; });
+}
 
-        <!-- TAB 3: BRAIN DUMP -->
-        <section id="sec-brain-dump" class="hidden space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-3">
-                <textarea id="brain-dump-input" rows="3" placeholder="أفرغ أفكارك العشوائية هنا فوراً... لا تحبس فكرة في عقلك!" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                <button onclick="addBrainDumpNote()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">
-                    حفظ الملاحظة السريعة 💡
-                </button>
-            </div>
+/* ---------- UI helpers ---------- */
+function toast(msg, actLabel, act) {
+  const el = document.getElementById('toast'), b = document.getElementById('toast-act');
+  document.getElementById('toast-text').textContent = msg;
+  if (actLabel) { b.textContent = actLabel; b.classList.remove('hidden'); b.onclick = () => { act(); el.hidden = true; }; }
+  else b.classList.add('hidden');
+  el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => el.hidden = true, 5000);
+}
+function removeWithUndo(list, id, label) {
+  const i = S[list].findIndex(x => x.id === id); if (i < 0) return;
+  lastDel = {list, item: S[list][i], i};
+  S[list].splice(i, 1); save();
+  toast(label, 'تراجع', () => { S[lastDel.list].splice(lastDel.i, 0, lastDel.item); lastDel = null; save(); });
+}
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(b => { const on = b.id === 'tab-' + name; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
+  document.querySelectorAll('main > section').forEach(s => s.hidden = s.id !== 'sec-' + name);
+}
+function setTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
+  document.querySelector('meta[name=theme-color]').content = dark ? '#1f2937' : '#4f46e5';
+}
+function enter(id, fn) { document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fn(); } }); }
 
-            <!-- Notes List -->
-            <div class="space-y-3">
-                <h2 class="text-base font-bold text-gray-700 dark:text-gray-300">الملاحظات والأفكار السريعة</h2>
-                <div id="brain-dump-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <!-- Dynamic Items -->
-                </div>
-            </div>
-        </section>
+/* ---------- Tasks ---------- */
+function addTask() {
+  const inp = document.getElementById('task-input'), text = inp.value.trim(); if (!text) return;
+  const t = todayK();
+  S.tasks.push({id: Date.now(), text, category: document.getElementById('task-category').value,
+    date: document.getElementById('task-day').value === 'tomorrow' ? addD(t, 1) : t,
+    priority: +document.getElementById('task-priority').value, completed: false});
+  inp.value = ''; save();
+}
+function toggleTask(id) { const x = S.tasks.find(t => t.id === id); if (x) { x.completed = !x.completed; save(); } }
+function deleteTask(id) { removeWithUndo('tasks', id, 'تم حذف المهمة'); }
+function editTask(id) {
+  const x = S.tasks.find(t => t.id === id); if (!x) return;
+  const v = prompt('تعديل المهمة:', x.text);
+  if (v && v.trim()) { x.text = v.trim(); save(); }
+}
+function moveToToday(id) { const x = S.tasks.find(t => t.id === id); if (x) { x.date = todayK(); save(); } }
+function togglePriority(id) { const x = S.tasks.find(t => t.id === id); if (x) { x.priority = x.priority ? 0 : 1; save(); } }
+function taskHtml(t, tomorrow) {
+  const late = t.date < todayK();
+  return `<div class="item"><label>${tomorrow ? '' : `<input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})">`}
+    <span class="${t.completed ? 'done' : ''}" style="font-size:.9rem;font-weight:600;word-break:break-word">${esc(t.text)}</span>
+    <span class="tag">${esc(t.category)}</span>${late && !t.completed ? '<span class="tag late">متأخرة</span>' : ''}</label>
+    <span class="row" style="gap:0">
+     ${tomorrow ? `<button class="ico" aria-label="انقل لليوم" title="انقل لليوم" onclick="moveToToday(${t.id})">⬆️</button>` : ''}
+     <button class="ico ${t.priority ? 'on' : ''}" aria-label="أولوية" onclick="togglePriority(${t.id})">${t.priority ? '⭐' : '☆'}</button>
+     <button class="ico" aria-label="تعديل" onclick="editTask(${t.id})">✏️</button>
+     <button class="ico" aria-label="حذف المهمة" onclick="deleteTask(${t.id})">✕</button></span></div>`;
+}
+function renderTasks() {
+  const t = todayK(), byCat = x => filterCat === 'all' || x.category === filterCat;
+  const today = S.tasks.filter(x => x.date <= t), tomorrow = S.tasks.filter(x => x.date > t);
+  const shown = today.filter(byCat).sort((a, b) => a.completed - b.completed || b.priority - a.priority || a.date.localeCompare(b.date));
+  document.getElementById('today-list').innerHTML = shown.length ? shown.map(x => taskHtml(x, false)).join('') : '<p class="empty">لا توجد مهام لليوم</p>';
+  const tm = tomorrow.filter(byCat).sort((a, b) => b.priority - a.priority);
+  document.getElementById('tomorrow-list').innerHTML = tm.length ? tm.map(x => taskHtml(x, true)).join('') : '<p class="empty">لا توجد مهام مجدولة للغد</p>';
+  document.getElementById('tasks-progress').textContent = `${today.filter(x => x.completed).length} / ${today.length}`;
+}
 
-    </main>
+/* ---------- Habits ---------- */
+function habitDays() { return [...document.querySelectorAll('#habit-days input:checked')].map(i => +i.value); }
+function addHabit() {
+  const inp = document.getElementById('habit-input'), name = inp.value.trim(); if (!name) return;
+  const wd = habitDays(); if (!wd.length) return toast('اختر يوماً واحداً على الأقل');
+  S.habits.push({id: Date.now(), name, days: [], weekdays: wd}); inp.value = ''; save();
+}
+function toggleHabit(id, k) {
+  const h = S.habits.find(x => x.id === id); if (!h) return;
+  const i = h.days.indexOf(k); i >= 0 ? h.days.splice(i, 1) : h.days.push(k); save();
+}
+function deleteHabit(id) { removeWithUndo('habits', id, 'تم حذف العادة'); }
+function streaks(h) {
+  const set = new Set(h.days), t = todayK(), sched = k => h.weekdays.includes(dow(k));
+  let cur = 0, k = t, n = 0;
+  while (n++ < 800) { if (sched(k)) { if (set.has(k)) cur++; else if (k !== t) break; } k = addD(k, -1); }
+  let best = 0, run = 0; k = h.days.length ? h.days.reduce((a, b) => a < b ? a : b) : t;
+  while (k <= t) { if (sched(k)) { if (set.has(k)) { run++; best = Math.max(best, run); } else if (k !== t) run = 0; } k = addD(k, 1); }
+  return {cur, best};
+}
+function habitRate(h, n) {
+  const set = new Set(h.days), t = todayK(); let s = 0, d = 0;
+  for (let i = 0; i < n; i++) { const k = addD(t, -i); if (h.weekdays.includes(dow(k))) { s++; if (set.has(k)) d++; } }
+  return {s, d};
+}
+function renderHabits() {
+  const list = document.getElementById('habits-list'), t = todayK();
+  if (!S.habits.length) { list.innerHTML = '<p class="empty">لا توجد عادات بعد. أضف عاداتك اليومية!</p>'; return; }
+  list.innerHTML = S.habits.map(h => {
+    const {cur, best} = streaks(h), r = habitRate(h, 30), pct = r.s ? Math.round(r.d / r.s * 100) : 0, set = new Set(h.days);
+    const cells = [6,5,4,3,2,1,0].map(i => { const k = addD(t, -i), on = set.has(k), sc = h.weekdays.includes(dow(k));
+      return `<div class="day ${i === 0 ? 'today' : ''}"><button class="${on ? 'y' : ''} ${sc ? '' : 'off'}" aria-label="${k}" onclick="toggleHabit(${h.id},'${k}')">${on ? '✓' : ''}</button><span>${DAYS[dow(k)]}</span></div>`; }).join('');
+    return `<div class="hab"><div class="row" style="justify-content:space-between"><div><h3 style="font-size:.95rem">${esc(h.name)}</h3>
+      <p class="small">🔥 الحالي: <b style="color:var(--pri)">${cur}</b> • 🏆 الأطول: <b>${best}</b> • الالتزام (30 يوم): <b>${pct}%</b></p></div>
+      <button class="ico" aria-label="حذف العادة" onclick="deleteHabit(${h.id})">✕</button></div><div class="week">${cells}</div></div>`;
+  }).join('');
+}
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        // State Management
-        let appState = {
-            tasks: [],
-            habits: [],
-            notes: [],
-            darkMode: false
-        };
+/* ---------- Notes ---------- */
+function addNote() {
+  const inp = document.getElementById('note-input'), text = inp.value.trim(); if (!text) return;
+  S.notes.push({id: Date.now(), text, ts: Date.now(), pinned: false}); inp.value = ''; save();
+}
+function noteToTask(id) {
+  const n = S.notes.find(x => x.id === id); if (!n) return;
+  S.tasks.push({id: Date.now(), text: n.text, category: 'شخصي', date: todayK(), priority: 0, completed: false});
+  S.notes = S.notes.filter(x => x.id !== id); save(); switchTab('tasks');
+}
+function pinNote(id) { const n = S.notes.find(x => x.id === id); if (n) { n.pinned = !n.pinned; save(); } }
+function deleteNote(id) { removeWithUndo('notes', id, 'تم حذف الملاحظة'); }
+function renderNotes() {
+  const list = document.getElementById('notes-list');
+  const q = noteQ.toLowerCase(), arr = S.notes.filter(n => !q || n.text.toLowerCase().includes(q)).sort((a, b) => (b.pinned | 0) - (a.pinned | 0) || b.ts - a.ts);
+  if (!arr.length) { list.innerHTML = `<p class="empty" style="grid-column:1/-1">${q ? 'لا نتائج' : 'صندوق الأفكار فارغ.'}</p>`; return; }
+  list.innerHTML = arr.map(n => `<div class="card note"><p>${esc(n.text)}</p>
+    <div class="row" style="justify-content:space-between;border-top:1px solid var(--bd);padding-top:.5rem">
+     <span class="small">${new Date(n.ts).toLocaleString('ar-EG', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})}</span>
+     <span class="row" style="gap:.2rem"><button class="btn ghost" style="padding:.25rem .6rem;font-size:.75rem" onclick="noteToTask(${n.id})">➔ لمهمة</button>
+     <button class="ico ${n.pinned ? 'on' : ''}" aria-label="تثبيت" onclick="pinNote(${n.id})">📌</button>
+     <button class="ico" aria-label="حذف الملاحظة" onclick="deleteNote(${n.id})">✕</button></span></div></div>`).join('');
+}
 
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            setupDate();
-            setupTheme();
-            renderAll();
-            registerServiceWorker();
-        });
+/* ---------- Stats ---------- */
+function renderStats() {
+  const t = todayK(), today = S.tasks.filter(x => x.date <= t);
+  S.history[t] = {done: today.filter(x => x.completed).length, total: today.length};
+  let done = 0, hs = 0, hd = 0;
+  for (let i = 0; i < 7; i++) { const k = addD(t, -i); done += (S.history[k] || {}).done || 0; }
+  S.habits.forEach(h => { const r = habitRate(h, 7); hs += r.s; hd += r.d; });
+  document.getElementById('stats').textContent = `📊 آخر 7 أيام: ${done} مهمة منجزة` + (hs ? ` • التزام العادات ${Math.round(hd / hs * 100)}%` : '');
+}
+function render() { renderTasks(); renderHabits(); renderNotes(); renderStats(); persist(); }
 
-        function loadState() {
-            const saved = localStorage.getItem('life_dashboard_data');
-            if (saved) {
-                try { appState = JSON.parse(saved); } catch(e) {}
-            }
-        }
+/* ---------- Backup ---------- */
+function exportData() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], {type: 'application/json'}));
+  a.download = `dawam-backup-${todayK()}.json`; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function importData(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (!d || !['tasks','habits','notes'].some(k => Array.isArray(d[k]))) throw 0;
+      if (!confirm('سيتم استبدال بياناتك الحالية بالنسخة المستوردة. متأكد؟')) return;
+      S = migrate(d); save(); toast('تم الاستيراد ✅');
+    } catch (e) { toast('الملف غير صالح'); }
+    inp.value = '';
+  };
+  r.readAsText(f);
+}
 
-        function saveState() {
-            localStorage.setItem('life_dashboard_data', JSON.stringify(appState));
-            renderAll();
-        }
+/* ---------- Reminder on open ---------- */
+function showReminder() {
+  const t = todayK(), tasks = S.tasks.filter(x => x.date <= t && !x.completed).length;
+  const habits = S.habits.filter(h => h.weekdays.includes(dow(t)) && !h.days.includes(t)).length;
+  if (!tasks && !habits) return;
+  document.getElementById('reminder-text').textContent = `🔔 متبقي اليوم: ${tasks} مهمة و${habits} عادة`;
+  document.getElementById('reminder').hidden = false;
+}
 
-        function setupDate() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG', options);
-        }
+/* ---------- PWA ---------- */
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+function dismissIos() { document.getElementById('ios-hint').hidden = true; try { localStorage.setItem('ios_hint_dismissed', '1'); } catch (e) {} }
+function setupPWA() {
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed:', err));
+  const btn = document.getElementById('install-btn');
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; btn.classList.remove('hidden'); });
+  btn.addEventListener('click', () => {
+    if (!deferredPrompt) return;
+    btn.classList.add('hidden'); deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => deferredPrompt = null);
+  });
+  window.addEventListener('appinstalled', () => btn.classList.add('hidden'));
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let dismissed = false; try { dismissed = localStorage.getItem('ios_hint_dismissed'); } catch (e) {}
+  if (ios && !isStandalone() && !dismissed) document.getElementById('ios-hint').hidden = false;
+}
 
-        // Dark Mode Logic
-        function setupTheme() {
-            const isDark = appState.darkMode || window.matchMedia('(prefers-color-scheme: dark)').matches;
-            setTheme(isDark);
-
-            document.getElementById('theme-toggle').addEventListener('click', () => {
-                setTheme(!document.documentElement.classList.contains('dark'));
-            });
-        }
-
-        function setTheme(isDark) {
-            appState.darkMode = isDark;
-            if (isDark) {
-                document.documentElement.classList.add('dark');
-                document.getElementById('theme-icon').textContent = '☀️';
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.getElementById('theme-icon').textContent = '🌙';
-            }
-            localStorage.setItem('life_dashboard_data', JSON.stringify(appState));
-        }
-
-        // Tab Switching
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
-        }
-
-        // Render Functions
-        function renderAll() {
-            renderTasks();
-            renderHabits();
-            renderBrainDump();
-        }
-
-        // TASKS LOGIC
-        function addTask() {
-            const input = document.getElementById('task-input');
-            const category = document.getElementById('task-category').value;
-            const targetDay = document.getElementById('task-target-day').value;
-
-            if (!input.value.trim()) return;
-
-            appState.tasks.push({
-                id: Date.now(),
-                text: input.value.trim(),
-                category: category,
-                targetDay: targetDay, // 'today' or 'tomorrow'
-                completed: false
-            });
-
-            input.value = '';
-            saveState();
-        }
-
-        function toggleTask(id) {
-            const task = appState.tasks.find(t => t.id === id);
-            if (task) {
-                task.completed = !task.completed;
-                saveState();
-            }
-        }
-
-        function deleteTask(id) {
-            appState.tasks = appState.tasks.filter(t => t.id !== id);
-            saveState();
-        }
-
-        function renderTasks() {
-            const todayList = document.getElementById('today-tasks-list');
-            const tomorrowList = document.getElementById('tomorrow-tasks-list');
-
-            const todayTasks = appState.tasks.filter(t => t.targetDay === 'today');
-            const tomorrowTasks = appState.tasks.filter(t => t.targetDay === 'tomorrow');
-
-            // Render Today Tasks
-            if (todayTasks.length === 0) {
-                todayList.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">لا توجد مهام مضافة لليوم</p>`;
-            } else {
-                todayList.innerHTML = todayTasks.map(t => `
-                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700/60 shadow-sm transition">
-                        <div class="flex items-center gap-3">
-                            <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer">
-                            <span class="${t.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-200'} text-sm font-medium">${escapeHtml(t.text)}</span>
-                            <span class="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md font-semibold">${t.category}</span>
-                        </div>
-                        <button onclick="deleteTask(${t.id})" class="text-gray-400 hover:text-red-500 transition text-sm">✕</button>
-                    </div>
-                `).join('');
-            }
-
-            // Render Tomorrow Tasks
-            if (tomorrowTasks.length === 0) {
-                tomorrowList.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">لا توجد مهام مجدولة للغد</p>`;
-            } else {
-                tomorrowList.innerHTML = tomorrowTasks.map(t => `
-                    <div class="flex items-center justify-between p-3 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-gray-100 dark:border-gray-700/40">
-                        <div class="flex items-center gap-3">
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">${escapeHtml(t.text)}</span>
-                            <span class="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md font-semibold">${t.category}</span>
-                        </div>
-                        <button onclick="deleteTask(${t.id})" class="text-gray-400 hover:text-red-500 transition text-sm">✕</button>
-                    </div>
-                `).join('');
-            }
-
-            // Progress Tracker
-            const completedCount = todayTasks.filter(t => t.completed).length;
-            document.getElementById('tasks-progress').textContent = `${completedCount} / ${todayTasks.length}`;
-        }
-
-        // HABITS LOGIC
-        function addHabit() {
-            const input = document.getElementById('habit-input');
-            if (!input.value.trim()) return;
-
-            const todayKey = new Date().toISOString().split('T')[0];
-
-            appState.habits.push({
-                id: Date.now(),
-                name: input.value.trim(),
-                streak: 0,
-                lastCompleted: null
-            });
-
-            input.value = '';
-            saveState();
-        }
-
-        function toggleHabitToday(id) {
-            const habit = appState.habits.find(h => h.id === id);
-            if (!habit) return;
-
-            const todayKey = new Date().toISOString().split('T')[0];
-
-            if (habit.lastCompleted === todayKey) {
-                habit.lastCompleted = null;
-                habit.streak = Math.max(0, habit.streak - 1);
-            } else {
-                habit.lastCompleted = todayKey;
-                habit.streak += 1;
-            }
-
-            saveState();
-        }
-
-        function deleteHabit(id) {
-            appState.habits = appState.habits.filter(h => h.id !== id);
-            saveState();
-        }
-
-        function renderHabits() {
-            const list = document.getElementById('habits-list');
-            const todayKey = new Date().toISOString().split('T')[0];
-
-            if (appState.habits.length === 0) {
-                list.innerHTML = `<p class="text-xs text-gray-400 py-6 text-center">لا توجد عادات مضافة بعد. أضف عاداتك اليومية للالتزام بها!</p>`;
-                return;
-            }
-
-            list.innerHTML = appState.habits.map(h => {
-                const isDoneToday = h.lastCompleted === todayKey;
-                return `
-                    <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <button onclick="toggleHabitToday(${h.id})" class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg transition ${isDoneToday ? 'bg-green-500 text-white shadow-md shadow-green-500/20' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}">
-                                ${isDoneToday ? '✓' : ''}
-                            </button>
-                            <div>
-                                <h3 class="font-bold text-sm text-gray-800 dark:text-gray-100">${escapeHtml(h.name)}</h3>
-                                <p class="text-xs text-orange-5-00 font-semibold flex items-center gap-1">
-                                    <span>🔥 متتاليات الأيام (Streak):</span>
-                                    <span class="font-bold text-indigo-600 dark:text-indigo-400">${h.streak} أيام</span>
-                                </p>
-                            </div>
-                        </div>
-                        <button onclick="deleteHabit(${h.id})" class="text-gray-400 hover:text-red-500 transition text-sm">✕</button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // BRAIN DUMP LOGIC
-        function addBrainDumpNote() {
-            const input = document.getElementById('brain-dump-input');
-            if (!input.value.trim()) return;
-
-            appState.notes.push({
-                id: Date.now(),
-                text: input.value.trim(),
-                createdAt: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
-            });
-
-            input.value = '';
-            saveState();
-        }
-
-        function convertNoteToTask(id) {
-            const note = appState.notes.find(n => n.id === id);
-            if (!note) return;
-
-            appState.tasks.push({
-                id: Date.now(),
-                text: note.text,
-                category: 'شخصي',
-                targetDay: 'today',
-                completed: false
-            });
-
-            // Delete note after converting
-            appState.notes = appState.notes.filter(n => n.id !== id);
-            saveState();
-            switchTab('tasks');
-        }
-
-        function deleteNote(id) {
-            appState.notes = appState.notes.filter(n => n.id !== id);
-            saveState();
-        }
-
-        function renderBrainDump() {
-            const list = document.getElementById('brain-dump-list');
-
-            if (appState.notes.length === 0) {
-                list.innerHTML = `<div class="col-span-full text-xs text-gray-400 py-6 text-center">صندوق الأفكار فارغ. دون أي فكرة عشوائية فوراً هنا!</div>`;
-                return;
-            }
-
-            list.innerHTML = appState.notes.map(n => `
-                <div class="p-4 bg-amber-50/50 dark:bg-gray-800 rounded-2xl border border-amber-200/60 dark:border-gray-700/60 shadow-sm flex flex-col justify-between space-y-3">
-                    <p class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">${escapeHtml(n.text)}</p>
-                    <div class="flex items-center justify-between border-t border-amber-200/40 dark:border-gray-700/40 pt-2">
-                        <span class="text-[10px] text-gray-400">${n.createdAt}</span>
-                        <div class="flex gap-2">
-                            <button onclick="convertNoteToTask(${n.id})" class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-lg font-semibold hover:bg-indigo-100 transition">
-                                ➔ تحويل لمهمة
-                            </button>
-                            <button onclick="deleteNote(${n.id})" class="text-gray-400 hover:text-red-500 transition text-xs px-1">✕</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Helper Utility
-        function escapeHtml(str) {
-            return str.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
-        }
-
-        // PWA Registration & Deferred Install Prompt
-        let deferredPrompt;
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('Service Worker Registered'))
-                    .catch(err => console.log('SW Registration Failed:', err));
-            }
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                const installBtn = document.getElementById('install-btn');
-                installBtn.classList.remove('hidden');
-
-                installBtn.addEventListener('click', () => {
-                    installBtn.classList.add('hidden');
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-                });
-            });
-        }
-    </script>
+/* ---------- Init ---------- */
+function setupDate() {
+  document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+}
+document.addEventListener('DOMContentLoaded', () => {
+  load(); rollover();
+  setTheme(S.darkMode !== null ? S.darkMode : matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    S.darkMode = !document.documentElement.classList.contains('dark'); setTheme(S.darkMode); persist();
+  });
+  document.getElementById('habit-days').innerHTML = DAYS.map((d, i) => `<label class="chip"><input type="checkbox" value="${i}" checked><span>${d}</span></label>`).join('');
+  enter('task-input', addTask); enter('habit-input', addHabit);
+  setupDate(); render(); showReminder(); setupPWA();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { setupDate(); save(); } });
+});
+</script>
 </body>
 </html>

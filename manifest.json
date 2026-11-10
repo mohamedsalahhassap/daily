@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "لوحة التحكم الشخصية — Life Dashboard",
-  "short_name": "Life Dashboard",
+  "name": "دوام — لوحة التحكم الشخصية",
+  "short_name": "دوام",
   "description": "تطبيق تتبع المهام والعادات وتفريغ العقل يعمل بدون إنترنت",
   "lang": "ar",
   "dir": "rtl",
