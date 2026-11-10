@@ -29,26 +29,29 @@ header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--card)
 .logo i{font-style:normal;width:2.5rem;height:2.5rem;border-radius:.8rem;background:linear-gradient(135deg,#6366f1,#9333ea);display:grid;place-items:center;font-size:1.25rem;color:#fff}
 h1{font-size:1.1rem;line-height:1.2}h2{font-size:1rem;color:var(--sub);display:flex;justify-content:space-between;align-items:center;gap:.5rem}
 .small{font-size:.75rem;color:var(--sub)}
-nav{display:flex;border-top:1px solid var(--bd)}
-.tab{flex:1;padding:.75rem 0;font-size:.85rem;font-weight:600;color:var(--sub);border-bottom:2px solid transparent}
+nav{display:flex;border-top:1px solid var(--bd);overflow-x:auto}
+.tab{flex:1;padding:.75rem 0.5rem;font-size:.85rem;font-weight:600;color:var(--sub);border-bottom:2px solid transparent;white-space:nowrap;text-align:center}
 .tab.active{color:var(--pri);border-color:var(--pri)}
 main{padding:1.2rem 0 3rem}
 section{display:flex;flex-direction:column;gap:1.2rem}
 section[hidden]{display:none}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:1rem;padding:1rem;display:flex;flex-direction:column;gap:.7rem}
 .row{display:flex;gap:.5rem;align-items:center}.row.wrap2{flex-wrap:wrap}.grow{flex:1;min-width:0}
-input[type=text],select,textarea{background:var(--in);border:1px solid var(--bd);border-radius:.8rem;padding:.6rem .9rem;font-size:.9rem;width:100%}
+input[type=text],input[type=date],select,textarea{background:var(--in);border:1px solid var(--bd);border-radius:.8rem;padding:.6rem .9rem;font-size:.9rem;width:100%}
 select{width:auto}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:0}
 .btn{background:var(--pri);color:#fff;font-weight:700;padding:.6rem 1rem;border-radius:.8rem;font-size:.9rem;white-space:nowrap}
 .btn:hover{background:var(--pri2)}.btn.ghost{background:var(--soft);color:var(--pri)}
+.btn.sm{padding:.3rem .6rem;font-size:.75rem}
 .ico{color:var(--mut);padding:.3rem .45rem;border-radius:.5rem;font-size:.9rem}.ico:hover{color:var(--dng);background:var(--in)}.ico.on{color:var(--warn)}
 .item{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.7rem .8rem;background:var(--card);border:1px solid var(--bd);border-radius:.9rem}
 .item label{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0;cursor:pointer}
 .item input[type=checkbox]{width:1.25rem;height:1.25rem;accent-color:var(--pri);flex:none}
 .done{text-decoration:line-through;color:var(--mut)}
 .tag{font-size:.65rem;background:var(--in);padding:.1rem .5rem;border-radius:.4rem;font-weight:600;color:var(--sub);white-space:nowrap}
-.tag.late{background:#fee2e2;color:#b91c1c}.dark .tag.late{background:#7f1d1d;color:#fecaca}
+.tag.late,.tag.urgent{background:#fee2e2;color:#b91c1c}.dark .tag.late,.dark .tag.urgent{background:#7f1d1d;color:#fecaca}
+.tag.soon{background:#fef3c7;color:#b45309}.dark .tag.soon{background:#78350f;color:#fde68a}
+.tag.ok{background:#dcfce7;color:#15803d}.dark .tag.ok{background:#14532d;color:#bbf7d0}
 .badge{font-size:.75rem;background:var(--soft);color:var(--pri);padding:.15rem .65rem;border-radius:99px;font-weight:700}
 .list{display:flex;flex-direction:column;gap:.5rem}
 .empty{font-size:.8rem;color:var(--mut);text-align:center;padding:1.2rem 0}
@@ -71,6 +74,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-off
 #toast{position:fixed;inset-inline:1rem;bottom:calc(1rem + env(safe-area-inset-bottom));margin:auto;max-width:24rem;background:#111827;color:#fff;padding:.7rem 1rem;border-radius:.9rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.85rem;z-index:50;box-shadow:0 8px 24px #0005}
 #toast[hidden]{display:none}#toast button{color:#a5b4fc;font-weight:700}
 .hidden{display:none!important}
+
+/* Progress bar styles */
+.progress-bg{width:100%;height:.5rem;background:var(--in);border-radius:99px;overflow:hidden;margin-top:.4rem}
+.progress-fill{height:100%;background:var(--pri);border-radius:99px;transition:width .3s}
+.filter-btn{padding:.35rem .75rem;border-radius:.6rem;font-size:.8rem;font-weight:600;background:var(--in);color:var(--sub)}
+.filter-btn.active{background:var(--pri);color:#fff}
 </style>
 </head>
 <body>
@@ -85,6 +94,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-off
   </div>
   <nav role="tablist">
    <button class="tab active" id="tab-tasks" role="tab" onclick="switchTab('tasks')">📋 المهام</button>
+   <button class="tab" id="tab-academic" role="tab" onclick="switchTab('academic')">🎓 المواد الدراسية</button>
    <button class="tab" id="tab-habits" role="tab" onclick="switchTab('habits')">🔥 العادات</button>
    <button class="tab" id="tab-notes" role="tab" onclick="switchTab('notes')">💡 إفراغ العقل</button>
    <button class="tab" id="tab-backup" role="tab" onclick="switchTab('backup')">💾 نسخ احتياطي</button>
@@ -102,7 +112,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-off
    <div class="small" id="stats"></div>
    <div class="row wrap2">
     <input class="grow" type="text" id="task-input" placeholder="ما هي المهمة التي تريد إنجازها؟" style="min-width:12rem">
-    <select id="task-category" aria-label="التصنيف"><option value="دراسة">📚 دراسة</option><option value="عمل">💼 عمل</option><option value="شخصي">👤 شخصي</option><option value="صحة">💪 صحة</option></select>
+    <select id="task-category" aria-label="التصنيف"></select>
     <select id="task-day" aria-label="اليوم"><option value="today">اليوم</option><option value="tomorrow">الغد 🌙</option></select>
     <select id="task-priority" aria-label="الأولوية"><option value="0">عادية</option><option value="1">⭐ مهمة</option></select>
    </div>
@@ -110,11 +120,55 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-off
   </div>
   <div class="list">
    <h2><span>مهام اليوم</span>
-    <span class="row"><select id="filter-cat" aria-label="تصفية" onchange="filterCat=this.value;render()" style="font-size:.75rem;padding:.25rem .5rem"><option value="all">كل التصنيفات</option><option value="دراسة">دراسة</option><option value="عمل">عمل</option><option value="شخصي">شخصي</option><option value="صحة">صحة</option></select><span class="badge" id="tasks-progress">0 / 0</span></span></h2>
+    <span class="row"><select id="filter-cat" aria-label="تصفية" onchange="filterCat=this.value;render()" style="font-size:.75rem;padding:.25rem .5rem"><option value="all">كل التصنيفات</option></select><span class="badge" id="tasks-progress">0 / 0</span></span></h2>
    <div id="today-list" class="list"></div>
   </div>
   <div class="list" style="padding-top:1rem;border-top:1px solid var(--bd)">
    <h2>خطة الغد 🌙</h2><div id="tomorrow-list" class="list"></div>
+  </div>
+ </section>
+
+ <!-- ACADEMIC (SUBJECTS) -->
+ <section id="sec-academic" hidden>
+  <!-- Fast Filters -->
+  <div class="row wrap2" style="gap:.4rem">
+   <button class="filter-btn active" id="flt-all" onclick="setAcadFilter('all')">📚 الكل</button>
+   <button class="filter-btn" id="flt-backlog" onclick="setAcadFilter('backlog')">⚠️ المتراكمات فقط</button>
+   <button class="filter-btn" id="flt-quizzes" onclick="setAcadFilter('quizzes')">⏰ الكويزات والقادمة</button>
+  </div>
+
+  <!-- Subjects Overview Cards -->
+  <div id="sub-overview" class="grid2"></div>
+
+  <!-- Add Backlog & Quiz Form -->
+  <div class="grid2">
+   <!-- Add Backlog -->
+   <div class="card">
+    <h3 style="font-size:.95rem">➕ إضافة محاضرة/درس متراكم</h3>
+    <select id="backlog-sub"></select>
+    <input type="text" id="backlog-title" placeholder="اسم المحاضرة أو الشيت (مثال: Lecture 3 Filter Design)">
+    <button class="btn ghost" onclick="addBacklog()">إضافة للمتراكمات 📌</button>
+   </div>
+   <!-- Add Quiz/Assignment -->
+   <div class="card">
+    <h3 style="font-size:.95rem">➕ إضافة كويز / تسليم</h3>
+    <select id="quiz-sub"></select>
+    <input type="text" id="quiz-title" placeholder="عنوان الكويز/التسليم (مثال: Quiz 1 - Ch 1 & 2)">
+    <input type="date" id="quiz-date">
+    <button class="btn ghost" onclick="addQuiz()">إضافة الكويز ⏰</button>
+   </div>
+  </div>
+
+  <!-- Backlog List -->
+  <div class="card" id="card-backlog-list">
+   <h2><span>⚠️ قائمة المتراكمات</span> <span class="badge" id="backlog-count">0</span></h2>
+   <div id="backlog-list" class="list"></div>
+  </div>
+
+  <!-- Quizzes List -->
+  <div class="card" id="card-quizzes-list">
+   <h2><span>⏰ الكويزات والتسليمات القادمة</span> <span class="badge" id="quizzes-count">0</span></h2>
+   <div id="quizzes-list" class="list"></div>
   </div>
  </section>
 
@@ -156,8 +210,26 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-off
 <script>
 const KEY = 'life_dashboard_data';
 const DAYS = ['ح','ن','ث','ر','خ','ج','س'];
-const DEF = () => ({tasks: [], habits: [], notes: [], darkMode: null, history: {}});
-let S = DEF(), filterCat = 'all', noteQ = '', lastDel = null, toastTimer, deferredPrompt;
+const DEFAULT_SUBJECTS = [
+  { id: 'ai', name: 'Artificial Intelligence (AI)' },
+  { id: 'dsp', name: 'Digital Signal Processing (DSP)' },
+  { id: 'algo', name: 'Algorithms Analysis & Design' },
+  { id: 'co', name: 'Computer Organization (CO)' },
+  { id: 'net', name: 'Networking R&S' },
+  { id: 'os', name: 'Operating Systems (OS)' }
+];
+
+const DEF = () => ({
+  tasks: [],
+  habits: [],
+  notes: [],
+  backlog: [],
+  quizzes: [],
+  darkMode: null,
+  history: {}
+});
+
+let S = DEF(), filterCat = 'all', acadFilter = 'all', noteQ = '', lastDel = null, toastTimer, deferredPrompt;
 
 /* ---------- Date helpers (local time, not UTC) ---------- */
 const pad = n => String(n).padStart(2, '0');
@@ -171,7 +243,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>'
 /* ---------- State ---------- */
 function migrate(r) {
   const s = Object.assign(DEF(), r), t = todayK();
-  ['tasks','habits','notes'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
+  ['tasks','habits','notes','backlog','quizzes'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
   if (!s.history || typeof s.history !== 'object') s.history = {};
   s.tasks.forEach((x, i) => {
     if (!x.date) x.date = x.targetDay === 'tomorrow' ? addD(t, 1) : t;
@@ -187,6 +259,8 @@ function migrate(r) {
     if (!Array.isArray(h.weekdays) || !h.weekdays.length) h.weekdays = [0,1,2,3,4,5,6];
   });
   s.notes.forEach((n, i) => { n.id = n.id || Date.now() + i; n.ts = n.ts || n.id; delete n.createdAt; });
+  s.backlog.forEach((b, i) => { b.id = b.id || Date.now() + i; b.completed = !!b.completed; });
+  s.quizzes.forEach((q, i) => { q.id = q.id || Date.now() + i; q.completed = !!q.completed; });
   if (typeof s.darkMode !== 'boolean') s.darkMode = null;
   return s;
 }
@@ -199,7 +273,6 @@ function persist() {
 }
 function save() { rollover(); persist(); render(); }
 
-/* New day: completed tasks from previous days are cleaned; unfinished ones show as "late" */
 function rollover() {
   const t = todayK();
   S.tasks = S.tasks.filter(x => !(x.completed && x.date < t));
@@ -230,6 +303,23 @@ function setTheme(dark) {
   document.querySelector('meta[name=theme-color]').content = dark ? '#1f2937' : '#4f46e5';
 }
 function enter(id, fn) { document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fn(); } }); }
+
+/* ---------- Dropdowns Initialization ---------- */
+function initSubOptions() {
+  const cats = ['عمل','شخصي','صحة', ...DEFAULT_SUBJECTS.map(s => s.name)];
+  
+  const catSel = document.getElementById('task-category');
+  catSel.innerHTML = cats.map(c => `<option value="${esc(c)}">${c.includes('(')?'📚 ':''}${esc(c)}</option>`).join('');
+
+  const filterSel = document.getElementById('filter-cat');
+  filterSel.innerHTML = `<option value="all">كل التصنيفات</option>` + cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+
+  const bSub = document.getElementById('backlog-sub');
+  const qSub = document.getElementById('quiz-sub');
+  const opts = DEFAULT_SUBJECTS.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  if (bSub) bSub.innerHTML = opts;
+  if (qSub) qSub.innerHTML = opts;
+}
 
 /* ---------- Tasks ---------- */
 function addTask() {
@@ -268,6 +358,156 @@ function renderTasks() {
   const tm = tomorrow.filter(byCat).sort((a, b) => b.priority - a.priority);
   document.getElementById('tomorrow-list').innerHTML = tm.length ? tm.map(x => taskHtml(x, true)).join('') : '<p class="empty">لا توجد مهام مجدولة للغد</p>';
   document.getElementById('tasks-progress').textContent = `${today.filter(x => x.completed).length} / ${today.length}`;
+}
+
+/* ---------- Academic (Subjects, Backlog, Quizzes) ---------- */
+function setAcadFilter(f) {
+  acadFilter = f;
+  ['all','backlog','quizzes'].forEach(k => {
+    document.getElementById('flt-' + k).classList.toggle('active', k === f);
+  });
+  renderAcademic();
+}
+
+function addBacklog() {
+  const subId = document.getElementById('backlog-sub').value;
+  const titleInp = document.getElementById('backlog-title');
+  const title = titleInp.value.trim();
+  if (!title) return toast('يرجى كتابة عنوان المحاضرة أو الشيت');
+  S.backlog.push({ id: Date.now(), subjectId: subId, title, completed: false });
+  titleInp.value = ''; save(); toast('تمت إضافة المحاضرة للمتراكمات');
+}
+
+function toggleBacklog(id) {
+  const b = S.backlog.find(x => x.id === id); if (b) { b.completed = !b.completed; save(); }
+}
+function deleteBacklog(id) { removeWithUndo('backlog', id, 'تم حذف الدرس المتراكم'); }
+
+function plantBacklogToToday(id) {
+  const b = S.backlog.find(x => x.id === id); if (!b) return;
+  const sub = DEFAULT_SUBJECTS.find(s => s.id === b.subjectId);
+  const cat = sub ? sub.name : 'دراسة';
+  S.tasks.push({ id: Date.now(), text: `مذاكرة: ${b.title}`, category: cat, date: todayK(), priority: 1, completed: false });
+  save(); toast('تم زراعة الدرس في مهام اليوم 🚀'); switchTab('tasks');
+}
+
+function addQuiz() {
+  const subId = document.getElementById('quiz-sub').value;
+  const titleInp = document.getElementById('quiz-title');
+  const dateInp = document.getElementById('quiz-date');
+  const title = titleInp.value.trim(), date = dateInp.value;
+  if (!title || !date) return toast('يرجى ادخال العنوان والتاريخ');
+  S.quizzes.push({ id: Date.now(), subjectId: subId, title, dueDate: date, completed: false });
+  titleInp.value = ''; dateInp.value = ''; save(); toast('تمت إضافة الكويز/التسليم');
+}
+
+function toggleQuiz(id) {
+  const q = S.quizzes.find(x => x.id === id); if (q) { q.completed = !q.completed; save(); }
+}
+function deleteQuiz(id) { removeWithUndo('quizzes', id, 'تم حذف الكويز'); }
+
+function plantQuizToToday(id) {
+  const q = S.quizzes.find(x => x.id === id); if (!q) return;
+  const sub = DEFAULT_SUBJECTS.find(s => s.id === q.subjectId);
+  const cat = sub ? sub.name : 'دراسة';
+  S.tasks.push({ id: Date.now(), text: `مراجعة كويز: ${q.title}`, category: cat, date: todayK(), priority: 1, completed: false });
+  save(); toast('تم إضافة مراجعة الكويز لليوم 🚀'); switchTab('tasks');
+}
+
+function renderAcademic() {
+  const t = todayK();
+
+  // Overview Cards
+  const ov = document.getElementById('sub-overview');
+  ov.innerHTML = DEFAULT_SUBJECTS.map(s => {
+    const sBacklog = S.backlog.filter(b => b.subjectId === s.id);
+    const sQuizzes = S.quizzes.filter(q => q.subjectId === s.id && !q.completed);
+    const bDone = sBacklog.filter(b => b.completed).length;
+    const bTotal = sBacklog.length;
+    const pct = bTotal ? Math.round((bDone / bTotal) * 100) : 100;
+    const nextQuiz = sQuizzes.sort((a,b) => a.dueDate.localeCompare(b.dueDate))[0];
+
+    return `<div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="font-size:.95rem">${esc(s.name)}</h3>
+        <span class="badge">${pct}% مكتمل</span>
+      </div>
+      <div class="small">متراكمات: <b>${bTotal - bDone}</b> متبقية من ${bTotal}</div>
+      <div class="progress-bg"><div class="progress-fill" style="width:${pct}%"></div></div>
+      ${nextQuiz ? `<div class="tag soon" style="margin-top:.4rem;align-self:start">⏰ كويز قادم: ${esc(nextQuiz.title)} (${nextQuiz.dueDate})</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Backlog List
+  const bListEl = document.getElementById('backlog-list');
+  const cardBacklog = document.getElementById('card-backlog-list');
+  if (acadFilter === 'quizzes') {
+    cardBacklog.hidden = true;
+  } else {
+    cardBacklog.hidden = false;
+    let bItems = S.backlog;
+    const pendingB = bItems.filter(b => !b.completed).length;
+    document.getElementById('backlog-count').textContent = `${pendingB} متبقي`;
+    
+    if (!bItems.length) {
+      bListEl.innerHTML = '<p class="empty">لا توجد دروس متراكمة. ممتاز!</p>';
+    } else {
+      bListEl.innerHTML = bItems.map(b => {
+        const sub = DEFAULT_SUBJECTS.find(s => s.id === b.subjectId);
+        return `<div class="item">
+          <label>
+            <input type="checkbox" ${b.completed ? 'checked' : ''} onchange="toggleBacklog(${b.id})">
+            <span class="${b.completed ? 'done' : ''}" style="font-size:.9rem;font-weight:600">${esc(b.title)}</span>
+            <span class="tag">${sub ? esc(sub.name) : ''}</span>
+          </label>
+          <span class="row" style="gap:.2rem">
+            ${!b.completed ? `<button class="btn ghost sm" onclick="plantBacklogToToday(${b.id})">➔ لمهام اليوم</button>` : ''}
+            <button class="ico" aria-label="حذف" onclick="deleteBacklog(${b.id})">✕</button>
+          </span>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Quizzes List
+  const qListEl = document.getElementById('quizzes-list');
+  const cardQuizzes = document.getElementById('card-quizzes-list');
+  if (acadFilter === 'backlog') {
+    cardQuizzes.hidden = true;
+  } else {
+    cardQuizzes.hidden = false;
+    let qItems = S.quizzes.sort((a,b) => a.dueDate.localeCompare(b.dueDate));
+    const activeQ = qItems.filter(q => !q.completed).length;
+    document.getElementById('quizzes-count').textContent = `${activeQ} قادم`;
+
+    if (!qItems.length) {
+      qListEl.innerHTML = '<p class="empty">لا توجد كويزات أو تسليمات مسجلة.</p>';
+    } else {
+      qListEl.innerHTML = qItems.map(q => {
+        const sub = DEFAULT_SUBJECTS.find(s => s.id === q.subjectId);
+        const diffDays = Math.ceil((parse(q.dueDate) - parse(t)) / (1000 * 60 * 60 * 24));
+        let tagCls = 'ok', tagText = `باقي ${diffDays} يوم`;
+        if (diffDays <= 2) { tagCls = 'urgent'; tagText = diffDays < 0 ? 'منتهي' : (diffDays === 0 ? 'اليوم!' : 'باقي يومين أو أقل'); }
+        else if (diffDays <= 7) { tagCls = 'soon'; }
+
+        return `<div class="item">
+          <label>
+            <input type="checkbox" ${q.completed ? 'checked' : ''} onchange="toggleQuiz(${q.id})">
+            <div>
+              <div class="${q.completed ? 'done' : ''}" style="font-size:.9rem;font-weight:600">${esc(q.title)}</div>
+              <div class="small">${q.dueDate}</div>
+            </div>
+            <span class="tag">${sub ? esc(sub.name) : ''}</span>
+            <span class="tag ${tagCls}">${tagText}</span>
+          </label>
+          <span class="row" style="gap:.2rem">
+            ${!q.completed ? `<button class="btn ghost sm" onclick="plantQuizToToday(${q.id})">➔ لمهام اليوم</button>` : ''}
+            <button class="ico" aria-label="حذف" onclick="deleteQuiz(${q.id})">✕</button>
+          </span>
+        </div>`;
+      }).join('');
+    }
+  }
 }
 
 /* ---------- Habits ---------- */
@@ -341,7 +581,7 @@ function renderStats() {
   S.habits.forEach(h => { const r = habitRate(h, 7); hs += r.s; hd += r.d; });
   document.getElementById('stats').textContent = `📊 آخر 7 أيام: ${done} مهمة منجزة` + (hs ? ` • التزام العادات ${Math.round(hd / hs * 100)}%` : '');
 }
-function render() { renderTasks(); renderHabits(); renderNotes(); renderStats(); persist(); }
+function render() { renderTasks(); renderAcademic(); renderHabits(); renderNotes(); renderStats(); persist(); }
 
 /* ---------- Backup ---------- */
 function exportData() {
@@ -396,7 +636,7 @@ function setupDate() {
   document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
 }
 document.addEventListener('DOMContentLoaded', () => {
-  load(); rollover();
+  load(); rollover(); initSubOptions();
   setTheme(S.darkMode !== null ? S.darkMode : matchMedia('(prefers-color-scheme: dark)').matches);
   document.getElementById('theme-toggle').addEventListener('click', () => {
     S.darkMode = !document.documentElement.classList.contains('dark'); setTheme(S.darkMode); persist();
